@@ -4,6 +4,7 @@
 ### Ubuntu Updates ####################
 #######################################
 
+
 - hosts: ubuntu
   tasks:
   - name: Get apt update and upgrade

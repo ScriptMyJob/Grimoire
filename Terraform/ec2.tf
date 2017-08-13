@@ -21,9 +21,14 @@ resource "aws_instance" "mysql_stack" {
     ]
     associate_public_ip_address = true
 
+    provisioner "local-exec" {
+        command     = "sleep 5"
+    }
+
     provisioner "remote-exec" {
         inline      = [
-            "sudo apt install python -y"
+            "sudo apt install python -y > /dev/null 2>&1",
+            "sudo apt install aptitude -y > /dev/null 2>&1"
         ]
 
         connection {
@@ -49,9 +54,14 @@ resource "aws_instance" "confluence_app_stack" {
     ]
     associate_public_ip_address = true
 
+    provisioner "local-exec" {
+        command     = "sleep 5"
+    }
+
     provisioner "remote-exec" {
         inline      = [
-            "sudo apt install python -y"
+            "sudo apt install python -y > /dev/null 2>&1",
+            "sudo apt install aptitude -y > /dev/null 2>&1"
         ]
 
         connection {
