@@ -2,3 +2,4 @@
 /Terraform/vars.tf
 /Terraform/terraform.tfstate*
 /Ansible/inventory
+/Resources/rjackson.pem
