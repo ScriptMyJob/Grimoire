@@ -1,3 +1,4 @@
 /Terraform/creds.tf
 /Terraform/vars.tf
 /Terraform/terraform.tfstate*
+/Ansible/inventory
