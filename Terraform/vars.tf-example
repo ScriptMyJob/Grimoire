@@ -1,0 +1,13 @@
+variable "config" {
+    type        = "map"
+    default     = {
+        terraform_server    = "123.45.67.89/32"
+        trusted_network     = "98.76.54.32/32"
+    }
+}
+variable "vpc" {
+    type        = "map"
+    default     = {
+        region  = "us-east-1"
+    }
+}
