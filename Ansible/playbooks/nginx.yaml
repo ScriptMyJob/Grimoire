@@ -19,9 +19,3 @@
       name: nginx
       state: present
     become: true
-
-#######################################
-### Service Management ################
-#######################################
-
-- include: nginx_restart.yaml

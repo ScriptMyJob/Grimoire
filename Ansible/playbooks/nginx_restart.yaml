@@ -5,9 +5,12 @@
     shell: |
       nginx -t
     become: true
+    changed_when: false
 
   - name: Restart Nginx
     service:
       name: nginx
       state: restarted
     become: true
+    when: confluence.stat.isdir is not defined
+
