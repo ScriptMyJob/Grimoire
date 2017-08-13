@@ -26,3 +26,10 @@ ansible_ssh_user=ubuntu
 
 INVENTORY
 }
+
+resource "null_resource" "chmod" {
+    depends_on      = ["local_file.ansible_inventory"]
+    provisioner "local-exec" {
+        command     = "chmod 600 ${path.module}/../Ansible/inventory"
+    }
+}

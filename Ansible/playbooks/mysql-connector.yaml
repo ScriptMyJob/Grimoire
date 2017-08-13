@@ -1,0 +1,25 @@
+---
+- hosts: confluence
+  tasks:
+  - name: checkign to see if MySQL connecter is in place
+    stat:
+      path: '/opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-5.1.43-bin.jar'
+    become: true
+    register: connector
+
+  - name: copy over mysql-connector-java-5.1.43-bin.jar
+    copy:
+      src: '../../Resources/mysql-connector-java-5.1.43-bin.jar'
+      dest: '/opt/atlassian/confluence/confluence/WEB-INF/lib/'
+      mode: 644
+    become: true
+    register: status
+    when: connector.stat.isreg is not defined
+
+  - name: Restarting confluence
+    shell: |
+      /opt/atlassian/confluence/bin/stop-confluence.sh
+      sleep 15;
+      /opt/atlassian/confluence/bin/start-confluence.sh
+    become: true
+    when: connector.stat.isreg is not defined

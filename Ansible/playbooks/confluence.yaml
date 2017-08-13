@@ -38,3 +38,5 @@
 - include: nginx_server_block.yaml
 
 - include: nginx_restart.yaml
+
+- include: mysql-connector.yaml

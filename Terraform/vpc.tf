@@ -4,7 +4,7 @@
 
 resource "aws_security_group" "ssh_inbound" {
     tags {
-        Name = "SSH from work and Terraform server"
+        Name = "DVOPS-464 - SSH from work and Terraform server"
     }
     ingress {
         cidr_blocks = [
@@ -25,7 +25,7 @@ resource "aws_security_group" "ssh_inbound" {
 
 resource "aws_security_group" "web_inbound" {
     tags {
-        Name = "Inbound Web services from anywhere"
+        Name = "DVOPS-464 - Inbound Web services from anywhere"
     }
     ingress {
         cidr_blocks = ["0.0.0.0/0"]
@@ -49,7 +49,7 @@ resource "aws_security_group" "web_inbound" {
 
 resource "aws_security_group" "mysql_inbound" {
     tags {
-        Name = "Inbound Web services from anywhere"
+        Name = "DVOPS-464 - Mysql Inbound"
     }
     ingress {
         cidr_blocks = [
@@ -63,7 +63,7 @@ resource "aws_security_group" "mysql_inbound" {
 
 resource "aws_security_group" "from_conf_to_mysql" {
     tags {
-        Name = "Inbound Web services from anywhere"
+        Name = "DVOPS-464 - Confluence Outbound"
     }
     egress {
         cidr_blocks = [

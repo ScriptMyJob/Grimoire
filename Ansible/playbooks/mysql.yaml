@@ -39,3 +39,43 @@
       name: mysqld
       state: started
     become: true
+
+#######################################
+### Database Management ###############
+#######################################
+
+- hosts: db_servers:!centos
+  tasks:
+  - name: Install pip
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - python-pip
+      - python-dev
+      - libmysqlclient-dev
+    become: true
+
+  - name: install mysqldb via pip
+    pip:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - pip
+      - MySQL-python
+    become: true
+
+- hosts: db_servers
+  tasks:
+  - name: Configuring MySQL database - confluence
+    mysql_db:
+      name: confluence
+      state: present
+    become: true
+
+  - name: Configuring MySQL user - confluence_user
+    mysql_user:
+      name: 'confluence_user'
+      password: 'change_me_later'
+      priv: 'confluence.*:ALL,GRANT'
+    become: true
