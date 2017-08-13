@@ -2,9 +2,30 @@
 ### Security Groups ####################
 ########################################
 
-resource "aws_security_group" "sg1" {
+resource "aws_security_group" "ssh_inbound" {
     tags {
         Name = "SSH from work and Terraform server"
+    }
+    ingress {
+        cidr_blocks = [
+            "${lookup(var.config, "trusted_network")}",
+            "${lookup(var.config, "terraform_server")}"
+        ]
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+    }
+    egress {
+        cidr_blocks = ["0.0.0.0/0"]
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+    }
+}
+
+resource "aws_security_group" "web_inbound" {
+    tags {
+        Name = "Inbound Web services from anywhere"
     }
     ingress {
         cidr_blocks = ["0.0.0.0/0"]
@@ -18,12 +39,6 @@ resource "aws_security_group" "sg1" {
         to_port     = 80
         protocol    = "tcp"
     }
-    ingress {
-        cidr_blocks = ["${lookup(var.config, "trusted_network")}", "${lookup(var.config, "terraform_server")}"]
-        from_port   = 22
-        to_port     = 22
-        protocol    = "tcp"
-    }
     egress {
         cidr_blocks = ["0.0.0.0/0"]
         from_port   = 0
@@ -31,3 +46,32 @@ resource "aws_security_group" "sg1" {
         protocol    = "-1"
     }
 }
+
+resource "aws_security_group" "mysql_inbound" {
+    tags {
+        Name = "Inbound Web services from anywhere"
+    }
+    ingress {
+        cidr_blocks = [
+            "${aws_eip.confluence_ip.public_ip}/32"
+        ]
+        from_port   = 3306
+        to_port     = 3306
+        protocol    = "tcp"
+    }
+}
+
+resource "aws_security_group" "from_conf_to_mysql" {
+    tags {
+        Name = "Inbound Web services from anywhere"
+    }
+    egress {
+        cidr_blocks = [
+            "${aws_eip.mysql_ip.public_ip}/32"
+        ]
+        from_port   = 3306
+        to_port     = 3306
+        protocol    = "tcp"
+    }
+}
+

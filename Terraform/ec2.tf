@@ -15,7 +15,10 @@ resource "aws_instance" "mysql_stack" {
         Name    = "MySQL Stack"
         Project = "grimoire_immutable"
     }
-    vpc_security_group_ids      = ["${aws_security_group.sg1.id}"]
+    vpc_security_group_ids      = [
+        "${aws_security_group.ssh_inbound.id}",
+        "${aws_security_group.mysql_inbound.id}"
+    ]
     associate_public_ip_address = true
 }
 
@@ -27,14 +30,24 @@ resource "aws_instance" "confluence_app_stack" {
         Name    = "Confluence App Stack"
         Project = "grimoire_immutable"
     }
-    vpc_security_group_ids      = ["${aws_security_group.sg1.id}"]
+    vpc_security_group_ids      = [
+        "${aws_security_group.ssh_inbound.id}",
+        "${aws_security_group.web_inbound.id}",
+        "${aws_security_group.from_conf_to_mysql.id}"
+    ]
     associate_public_ip_address = true
 }
 
-resource "aws_eip" "mysql_ip" {
-    instance = "${aws_instance.mysql_stack.id}"
+resource "aws_eip" "mysql_ip" {}
+
+resource "aws_eip" "confluence_ip" {}
+
+resource "aws_eip_association" "mysql_ip"{
+    instance_id     = "${aws_instance.mysql_stack.id}"
+    allocation_id   = "${aws_eip.mysql_ip.id}"
 }
 
-resource "aws_eip" "confluence_ip" {
-    instance = "${aws_instance.confluence_app_stack.id}"
+resource "aws_eip_association" "confluence_ip" {
+    instance_id     = "${aws_instance.confluence_app_stack.id}"
+    allocation_id   = "${aws_eip.confluence_ip.id}"
 }
