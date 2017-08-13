@@ -1,0 +1,27 @@
+---
+#######################################
+### Software Installation #############
+#######################################
+
+- hosts: web_servers:!centos
+  tasks:
+  - name: install nginx on Debian based servers
+    apt:
+      name: nginx
+      update_cache: yes
+      state: present
+    become: true
+
+- hosts: web_servers:!ubuntu
+  tasks:
+  - name: Installing Nginx on rhel based servers
+    yum:
+      name: nginx
+      state: present
+    become: true
+
+#######################################
+### Service Management ################
+#######################################
+
+- include: nginx_restart.yaml

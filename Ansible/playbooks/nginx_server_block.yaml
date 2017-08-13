@@ -1,0 +1,74 @@
+---
+- hosts: web_servers:!ubuntu
+  tasks:
+  - name: Configure nginx.conf to include sites-enabled.
+    lineinfile:
+      path: /etc/nginx/nginx.conf
+      line: "    include /etc/nginx/sites-enabled/*.conf;"
+      insertbefore: '^    server.*\{'
+    become: true
+
+- hosts: web_servers
+  tasks:
+  - name: Configure Nginx Sites Available
+    file:
+      path: /etc/nginx/sites-available
+      state: directory
+      mode: 0755
+    become: true
+
+  - name: Configure Nginx Sites Enabled
+    file:
+      path: /etc/nginx/sites-enabled
+      state: directory
+      mode: 0755
+    become: true
+
+  - name: Check to see if Server Block exists
+    stat:
+      path: /etc/nginx/sites-available/{{site_name}}.conf
+    register: server_block
+
+  - name: Configure Nginx Server Block
+    file:
+      path: /etc/nginx/sites-available/{{site_name}}.conf
+      mode: 0664
+      state: touch
+    become: true
+    when: server_block.stat.isreg is not defined
+
+  - name: Create Nginx symlink
+    file:
+      src: /etc/nginx/sites-available/{{site_name}}.conf
+      dest: /etc/nginx/sites-enabled/{{site_name}}.conf
+      state: link
+      mode: 0664
+    become: true
+
+  - name: Configuring the contents of server block
+    shell: |
+      cat > /etc/nginx/sites-available/{{site_name}}.conf << EOF
+      server {
+          listen                    80;
+          server_name               {{site_name}};
+
+          index                     index.html index.htm;
+
+          location / {
+              proxy_set_header      X-Forwarded-Host   \$host;
+              proxy_set_header      X-Forwarded-Server \$host;
+              proxy_set_header      X-Forwarded-For    \$proxy_add_x_forwarded_for;
+              proxy_pass            http://localhost:8090/;
+          }
+
+          location /synchrony {
+              proxy_set_header      X-Forwarded-Host   \$host;
+              proxy_set_header      X-Forwarded-Server \$host;
+              proxy_set_header      X-Forwarded-For    \$proxy_add_x_forwarded_for;
+              proxy_pass            http://localhost:8091/synchrony;
+              proxy_http_version    1.1;
+              proxy_set_header      Upgrade            \$http_upgrade;
+              proxy_set_header      Connection         "Upgrade";
+          }
+      }
+    become: true

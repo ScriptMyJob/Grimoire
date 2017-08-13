@@ -1,0 +1,41 @@
+---
+#######################################
+### Software Installation #############
+#######################################
+
+- hosts: db_servers:!centos
+  tasks:
+  - name: install mysql on Debian based servers
+    apt:
+      name: mysql-server
+      update_cache: yes
+      state: present
+    become: true
+
+- hosts: db_servers:!ubuntu
+  tasks:
+  - name: Install mysql on RHEL based servers
+    yum:
+      name: mysql-server
+      state: present
+    become: true
+
+#######################################
+### Service Management ################
+#######################################
+
+- hosts: db_servers:!centos
+  tasks:
+  - name: start mysql on Debian based servers
+    service:
+      name: mysql
+      state: started
+    become: true
+
+- hosts: db_servers:!ubuntu
+  tasks:
+  - name: start mysql on RHEL based servers
+    service:
+      name: mysqld
+      state: started
+    become: true

@@ -1,0 +1,40 @@
+---
+#######################################
+### Software Upgrades #################
+#######################################
+
+- include: patching.yaml
+
+#######################################
+### Software Installation #############
+#######################################
+
+- include: nginx.yaml
+
+- include: mysql.yaml
+
+- hosts: confluence
+  tasks:
+  - name: Download Atlassian Confluence
+    get_url:
+      url: https://www.atlassian.com/software/confluence/downloads/binary/atlassian-confluence-6.3.1-x64.bin
+      dest: /tmp/atlassian-confluence-6.3.1-x64.bin
+
+  - name: Check to see if Confluence is installed
+    stat:
+      path: /opt/atlassian
+    register: confluence
+
+  - name: Install Atlassian Confluence
+    shell: 'printf "o\n1\ni\ny\n" | bash /tmp/atlassian-confluence-6.3.1-x64.bin'
+    args:
+      executable: /bin/bash
+    become: true
+    when: confluence.stat.isdir is not defined
+
+  - set_fact:
+      site_name: local.scriptmyjob.com
+
+- include: nginx_server_block.yaml
+
+- include: nginx_restart.yaml

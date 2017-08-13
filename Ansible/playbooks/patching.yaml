@@ -1,0 +1,26 @@
+---
+
+#######################################
+### Ubuntu Updates ####################
+#######################################
+
+- hosts: ubuntu
+  tasks:
+  - name: Get apt update and upgrade
+    apt:
+      update_cache: yes
+      upgrade: yes
+    become: true
+
+#######################################
+### CentOS Updates ####################
+#######################################
+
+- hosts: centos
+  tasks:
+  - name: Get yum update and upgrade
+    yum:
+      name: '*'
+      state: latest
+    become: true
+

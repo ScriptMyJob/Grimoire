@@ -1,0 +1,13 @@
+---
+- hosts: web_servers
+  tasks:
+  - name: Check nginx configurationy
+    shell: |
+      nginx -t
+    become: true
+
+  - name: Restart Nginx
+    service:
+      name: nginx
+      state: restarted
+    become: true
