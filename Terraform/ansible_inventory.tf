@@ -2,8 +2,8 @@ resource "local_file" "ansible_inventory" {
     filename    = "${path.module}/../Ansible/inventory"
     content     = <<INVENTORY
 [aws]
-confluence_16.04 ansible_ssh_host=${aws_eip.confluence_ip.public_ip}
-database         ansible_ssh_host=${aws_eip.mysql_ip.public_ip}
+confluence_16.04 ansible_ssh_host=${lookup(var.vpc,"eip_address")}
+database         ansible_ssh_host=${aws_rds_cluster.scriptmyjob_shared_db.endpoint}
 
 [ubuntu]
 confluence_16.04
