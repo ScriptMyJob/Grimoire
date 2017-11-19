@@ -4,18 +4,11 @@
 
 resource "aws_rds_cluster" "scriptmyjob_shared_db" {
 
-    # FIX for IGW_2 not destorying on `terraform destroy`
-    depends_on                      = [
-        "aws_internet_gateway.scriptmyjob_igw"
-    ]
-
     database_name                   = "${lookup(var.rds, "db_name")}"
     master_username                 = "${lookup(var.rds, "db_user")}"
     master_password                 = "${lookup(var.rds, "db_password")}"
     port                            = "${lookup(var.rds, "db_port")}"
-    vpc_security_group_ids          = [
-        "${aws_security_group.mysql_inbound.id}"
-    ]
+    vpc_security_group_ids          = "${var.rds_secret_sgs}"
     db_subnet_group_name            = "${aws_db_subnet_group.default.name}"
     cluster_identifier              = "${lookup(var.rds, "db_identifier_cluster")}"
     db_cluster_parameter_group_name = "${lookup(var.rds, "db_type")}"
@@ -37,9 +30,6 @@ resource "aws_rds_cluster_instance" "scriptmyjob_shared_db" {
 
 resource "aws_db_subnet_group" "default" {
     name                            = "main"
-    subnet_ids                      = [
-        "${aws_subnet.master_rds_1.id}",
-        "${aws_subnet.master_rds_2.id}"
-    ]
+    subnet_ids                      = "${var.rds_secret_subnets}"
 }
 

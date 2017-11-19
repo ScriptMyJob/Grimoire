@@ -6,6 +6,7 @@ This is to track easily setting up an Attlassian Confluence stack with Terraform
 
 * Terraform
 * Ansible
+* IAM role "Grimoire" from my VPC Repo
 
 ##Getting started
 
