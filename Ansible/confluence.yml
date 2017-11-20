@@ -1,0 +1,5 @@
+---
+- hosts: confluence
+  roles:
+  - install_prereqs
+  - mysql

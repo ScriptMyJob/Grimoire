@@ -4,4 +4,5 @@
 /Terraform/vars.tf
 /Terraform/terraform.tfstate*
 /Ansible/inventory
+/Ansible/roles/mysql/vars/main.yml
 /Resources/rjackson.pem

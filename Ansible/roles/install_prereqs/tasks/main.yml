@@ -1,0 +1,30 @@
+- name: Install Prereqs | Pathcinge
+  apt:
+    update_cache: yes
+    upgrade: yes
+  become: true
+
+- name: Install Prereqs | Install tools
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+  with_items:
+    - 'mysql-client'
+    - 'nginx'
+    - 'python-pip'
+    - 'python-dev'
+    - 'libmysqlclient-dev'
+    - 'nmap'
+    - 'traceroute'
+    - 'tree'
+  become: true
+
+- name: install mysqldb via pip (For controlling DB Resources via Ansible)
+  pip:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - pip
+    - MySQL-python
+  become: true

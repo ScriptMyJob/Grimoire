@@ -16,8 +16,8 @@ resource "aws_rds_cluster" "scriptmyjob_shared_db" {
     preferred_backup_window         = "${lookup(var.rds, "db_backup_window")}"
     preferred_maintenance_window    = "${lookup(var.rds, "db_maint_window")}"
     storage_encrypted               = "${lookup(var.rds, "db_encryption")}"
-    skip_final_snapshot             = true
-    # final_snapshot_identifier       = "${lookup(var.rds, "db_final_snap")}"
+    # skip_final_snapshot             = true
+    final_snapshot_identifier       = "GrimoireFinalSnap"
 }
 
 resource "aws_rds_cluster_instance" "scriptmyjob_shared_db" {

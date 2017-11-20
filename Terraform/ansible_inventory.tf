@@ -3,23 +3,20 @@ resource "local_file" "ansible_inventory" {
     content     = <<INVENTORY
 [aws]
 confluence_16.04 ansible_ssh_host=${var.eip_address}
-database         ansible_ssh_host=${aws_rds_cluster.scriptmyjob_shared_db.endpoint}
 
 [ubuntu]
 confluence_16.04
-database
 
 [web_servers]
 confluence_16.04
 
 [db_servers]
-database
 
 [confluence]
 confluence_16.04
 
 [aws:vars]
-ansible_ssh_private_key_file=${path.module}/../Resources/rjackson.pem
+ansible_ssh_private_key_file='~/.ssh/AWS/Grimoire.pem'
 
 [ubuntu:vars]
 ansible_ssh_user=ubuntu
