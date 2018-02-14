@@ -1,0 +1,51 @@
+- name: Configure NGINX Directory Tree
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  with_items:
+    - '/etc/nginx/sites-available'
+    - '/etc/nginx/sites-enabled'
+    - '/etc/nginx/snippets'
+  become: true
+
+- name: Check to see if SSL is configured
+  shell: 'lsof -i :443'
+  register: ssl_port_check
+  ignore_errors: true
+  become: true
+
+- name: Create NGINX Server Block
+  template:
+    src: ../templates/nginx_http_server_blcok.nginx
+    dest: "/etc/nginx/sites-available/{{ site_name }}.conf"
+    mode: 0644
+  when: ssl_port_check.rc != 0
+  become: true
+
+- name: Create NGINX symlink
+  file:
+    src: "/etc/nginx/sites-available/{{ site_name }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ site_name }}.conf"
+    state: link
+    mode: 0644
+  when: ssl_port_check.rc != 0
+  become: true
+
+- name: Remove Default server block
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  become: true
+
+- name: Check NGINX configurations
+  shell: |
+    nginx -t
+  become: true
+  changed_when: false
+
+- name: Restart NGINX
+  service:
+    name: nginx
+    state: restarted
+  become: true

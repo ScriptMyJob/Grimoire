@@ -1,0 +1,6 @@
+- name: Restart Confluence
+  shell: |
+    /opt/atlassian/confluence/bin/stop-confluence.sh &&
+        sleep 10 &&
+            /opt/atlassian/confluence/bin/start-confluence.sh
+  become: true

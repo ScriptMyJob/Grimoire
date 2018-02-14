@@ -1,0 +1,37 @@
+- name: Download Atlassian Confluence
+  get_url:
+    url: https://product-downloads.atlassian.com/software/confluence/downloads/atlassian-confluence-6.5.0-x64.bin
+    dest: /tmp/atlassian-confluence-6.5.0-x64.bin
+
+- name: Install Atlassian Confluence
+  shell: 'printf "o\n1\ni\ny\n" | bash /tmp/atlassian-confluence-6.5.0-x64.bin'
+  args:
+    executable: /bin/bash
+    creates: /opt/atlassian
+  become: true
+
+- name: Configure server.xml
+  lineinfile:
+    path: /opt/atlassian/confluence/conf/server.xml
+    insertafter: '\s*Connector port="8090".*'
+    line: '                proxyName="{{ site_name }}" proxyPort="80"'
+  notify: Restart Confluence
+  become: true
+
+- name: Execute Handlers early if needed
+  meta:
+    flush_handlers
+
+- name: Download MySQL Connector
+  unarchive:
+    src: https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.45.zip
+    dest: /tmp
+    remote_src: yes
+
+- name: Move MySQL Connector
+  shell: |
+    cp -a /tmp/mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar \
+        /opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-5.1.45-bin.jar;
+  creates: /opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-5.1.45-bin.jar;
+  notify: Restart Confluence
+  become: true

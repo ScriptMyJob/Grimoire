@@ -1,7 +1,14 @@
-- name: Install Prereqs | Pathcinge
+- name: Install Prereqs | Patching Server
   apt:
     update_cache: yes
     upgrade: yes
+  become: true
+
+- name: Install Prereqs | Install aptitude (because apt-get does not like the next packages)
+  apt:
+    name: aptitude
+    update_cache: yes
+    state: present
   become: true
 
 - name: Install Prereqs | Install tools
@@ -18,6 +25,9 @@
     - 'nmap'
     - 'traceroute'
     - 'tree'
+    - 'atop'
+    - 'lsof'
+    - 'unzip'
   become: true
 
 - name: install mysqldb via pip (For controlling DB Resources via Ansible)
