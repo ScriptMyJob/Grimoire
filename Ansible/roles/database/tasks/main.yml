@@ -1,13 +1,15 @@
-- name: Configuring MySQL database - confluence
+- name: Configuring Confluence Database
   mysql_db:
     login_host: "{{ rds_endpoint }}"
     login_user: "{{ db_user }}"
     login_password: "{{ rds_password }}"
     name: confluence
     state: present
+    encoding: utf8
+    collation: utf8_bin
   become: true
 
-- name: Configuring MySQL user - confluence_user
+- name: Add Confluence Database User
   mysql_user:
     login_host: "{{ rds_endpoint }}"
     login_user: "{{ rds_user }}"
@@ -15,4 +17,6 @@
     name: 'confluence_user'
     password: 'change_me_later'
     priv: 'confluence.*:ALL,GRANT'
+    host: '%'
+    append_privs: yes
   become: true

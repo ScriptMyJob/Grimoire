@@ -1,7 +1,6 @@
 /Terraform/.terraform/*
 /Terraform/secrets.tf
 /Terraform/creds.tf
-/Terraform/vars.tf
 /Terraform/terraform.tfstate*
 /Ansible/roles/*/vars/main.yml
 /Resources/rjackson.pem

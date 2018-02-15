@@ -2,9 +2,9 @@ resource "local_file" "ansible_mysql_vars" {
     filename    = "${path.module}/../Ansible/roles/mysql/vars/main.yml"
     content     = <<VARS
 {
-    rds_endpoint: "${lookup(var.rds,"endpoint")}",
-    rds_user: "${lookup(var.rds, "db_user")}",
-    rds_password: "${lookup(var.rds, "db_passwd")}"
+    db_endpoint: "${lookup(var.db,"endpoint")}",
+    db_user: "${lookup(var.db, "db_user")}",
+    db_password: "${lookup(var.db, "db_passwd")}"
 }
 VARS
 }
