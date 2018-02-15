@@ -3,5 +3,5 @@
 /Terraform/creds.tf
 /Terraform/vars.tf
 /Terraform/terraform.tfstate*
-/Ansible/roles/mysql/vars/main.yml
+/Ansible/roles/*/vars/main.yml
 /Resources/rjackson.pem

@@ -5,7 +5,7 @@ resource "aws_launch_configuration" "confluence_server" {
     key_name                        = "${lookup(var.ec2, "key_name")}"
     security_groups                 = "${var.ec2_secret_sgs}"
     associate_public_ip_address     = true
-    user_data                       = "${lookup(var.ec2, "bootstrap")}"
+    user_data                       = "${file("bootstrap.sh")}"
     spot_price                      = "${lookup(var.ec2, "spot_price")}"
     iam_instance_profile            = "${var.ec2_secret_role}"
 }
