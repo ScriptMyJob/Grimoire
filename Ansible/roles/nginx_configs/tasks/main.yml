@@ -16,6 +16,7 @@
   become: true
 
 - name: Create NGINX Server Block
+  notify: Restart NGINX
   template:
     src: ../templates/nginx_http_server_blcok.nginx
     dest: "/etc/nginx/sites-available/{{ site_name }}.conf"
@@ -24,6 +25,7 @@
   become: true
 
 - name: Create NGINX symlink
+  notify: Restart NGINX
   file:
     src: "/etc/nginx/sites-available/{{ site_name }}.conf"
     dest: "/etc/nginx/sites-enabled/{{ site_name }}.conf"
@@ -33,19 +35,9 @@
   become: true
 
 - name: Remove Default server block
+  notify: Restart NGINX
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
   become: true
 
-- name: Check NGINX configurations
-  shell: |
-    nginx -t
-  become: true
-  changed_when: false
-
-- name: Restart NGINX
-  service:
-    name: nginx
-    state: restarted
-  become: true

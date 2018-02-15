@@ -1,0 +1,13 @@
+- name: Check NGINX configurations
+  listen: Restart NGINX
+  shell: |
+    nginx -t
+  become: true
+  changed_when: false
+
+- name: Restarting NGINX
+  listen: Restart NGINX
+  service:
+    name: nginx
+    state: restarted
+  become: true

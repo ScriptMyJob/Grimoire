@@ -1,7 +1,7 @@
 - name: Configuring MySQL database - confluence
   mysql_db:
     login_host: "{{ rds_endpoint }}"
-    login_user: "{{ rds_user }}"
+    login_user: "{{ db_user }}"
     login_password: "{{ rds_password }}"
     name: confluence
     state: present

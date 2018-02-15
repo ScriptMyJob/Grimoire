@@ -2,6 +2,6 @@
 - hosts: all
   roles:
   - install_prereqs
-  - mysql
+  # - mysql
   - install_confluence
   - nginx_configs

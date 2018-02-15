@@ -29,9 +29,22 @@
     remote_src: yes
 
 - name: Move MySQL Connector
-  shell: |
-    cp -a /tmp/mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar \
-        /opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-5.1.45-bin.jar;
-  creates: /opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-5.1.45-bin.jar;
+  copy:
+    src: /tmp/mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar
+    dest: /opt/atlassian/confluence/confluence/WEB-INF/lib/mysql-connector-java-5.1.45-bin.jar
+    owner: confluence
+    group: confluence
+    remote_src: yes
   notify: Restart Confluence
+  become: true
+
+- name: Update File permissions
+  file:
+    name: "{{ item }}"
+    recurse: yes
+    owner: confluence
+    group: confluence
+  with_items:
+    - /var/atlassian
+    - /opt/atlassian
   become: true
