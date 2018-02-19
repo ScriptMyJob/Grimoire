@@ -1,5 +1,5 @@
 resource "local_file" "ansible_mysql_vars" {
-    filename    = "${path.module}/../Ansible/roles/mysql/vars/main.yml"
+    filename    = "${path.module}/../Ansible/roles/database/vars/main.yml"
     content     = <<VARS
 {
     db_endpoint: "${lookup(var.db,"endpoint")}",

@@ -1,8 +1,8 @@
 - name: Configuring Confluence Database
   mysql_db:
-    login_host: "{{ rds_endpoint }}"
+    login_host: "{{ db_endpoint }}"
     login_user: "{{ db_user }}"
-    login_password: "{{ rds_password }}"
+    login_password: "{{ db_password }}"
     name: confluence
     state: present
     encoding: utf8
@@ -11,9 +11,9 @@
 
 - name: Add Confluence Database User
   mysql_user:
-    login_host: "{{ rds_endpoint }}"
-    login_user: "{{ rds_user }}"
-    login_password: "{{ rds_password }}"
+    login_host: "{{ db_endpoint }}"
+    login_user: "{{ db_user }}"
+    login_password: "{{ db_password }}"
     name: 'confluence_user'
     password: 'change_me_later'
     priv: 'confluence.*:ALL,GRANT'
