@@ -24,6 +24,6 @@ variable "ec2" {
         spot_price  = 0.07
         min_size    = 1
         max_size    = 1
-        tag_name    = "Confluence Server"
+        tag_name    = "Grimoire"
     }
 }

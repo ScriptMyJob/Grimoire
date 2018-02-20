@@ -11,7 +11,7 @@ import os
 #######################################
 
 region      = os.environ.get('region', 'us-west-2')
-Name        = os.environ.get('Name', 'Confluence Server')
+Name        = os.environ.get('Name', 'Grimoire')
 key_path    = os.environ.get('key_path', '~/.ssh/AWS/')
 ssh_user    = os.environ.get('ssh_user', 'ubuntu')
 

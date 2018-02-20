@@ -2,6 +2,6 @@
 - hosts: all
   roles:
       # - install_prereqs
-  - database
+      #c- database
   - install_confluence
   - nginx_configs
